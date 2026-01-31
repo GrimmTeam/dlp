@@ -60,4 +60,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: libffi-arm64-macos11
-          path: out-arm64    
+          path: src/libffi-3.5.2/out-arm64
