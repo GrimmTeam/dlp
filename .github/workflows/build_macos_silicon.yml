@@ -35,6 +35,7 @@ jobs:
         run: chmod +x configure
       
       - name: Build libffi (arm64, macOS 11+)
+        working-directory: src/libffi-3.5.2
         env:
           MACOSX_DEPLOYMENT_TARGET: "11.0"
           CC: "clang -arch arm64"
