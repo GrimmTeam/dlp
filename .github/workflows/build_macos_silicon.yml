@@ -53,8 +53,8 @@ jobs:
       
       - name: Verify architecture
         run: |
-          file out-arm64/lib/libffi.a
-          otool -l out-arm64/lib/libffi.a | grep -A2 LC_BUILD_VERSION
+          file src/libffi-3.5.2/out-arm64/lib/libffi.a
+          otool -l src/libffi-3.5.2/out-arm64/lib/libffi.a | grep -A2 LC_BUILD_VERSION
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
