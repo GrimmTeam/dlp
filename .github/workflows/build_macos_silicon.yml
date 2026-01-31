@@ -31,7 +31,7 @@ jobs:
       
       # Runs a single command using the runners shell
       - name: Preconfigure for libffi
-        working-directory: ${{ github.workspace }}/libffi-3.5.2
+        working-directory: $GITHUB_WORKSPACE/src/libffi-3.5.2
         run: chmod +x configure
       
       - name: Build libffi (arm64, macOS 11+)
