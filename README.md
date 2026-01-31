@@ -1,2 +1,7 @@
-# dlp
-Dynamic Libraries Provider. Collection of Java(Wrapper) and C++ libs for DL operations. The simple tool for routine needs.
+# **Vendors branch**
+
+
+
+This branch used as a storage for vendor projects:「libffi」
+Also, there will be posted pre-compiled version of C++ bindings for DLP project, for simple building and deployment process
+
