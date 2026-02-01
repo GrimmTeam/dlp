@@ -16,21 +16,30 @@ jobs:
           -v "$PWD:/src" \
           ubuntu:20.04 \
           bash -e -c "
-            apt-get update
-            apt-get install -y build-essential automake libtool
-            ls
-            cd /src/libffi-3.5.2
-            chmod +x configure
-
-            ./configure \
-              --host=aarch64-linux-gnu \
-              --enable-static \
-              --disable-shared \
-              --prefix=/src/libffi-3.5.2/glibc/arm64
-
-            make -j\$(nproc)
-            make install
+            echo 'Inside container:'
+            pwd
+            echo
+            echo 'Listing /src:'
+            ls -la /src
+            echo
+            echo 'Listing /src/src (if exists):'
+            ls -la /src/src || echo 'NO /src/src'
           "
+#            apt-get update
+#            apt-get install -y build-essential automake libtool
+#            ls
+#            cd /src/libffi-3.5.2
+#            chmod +x configure
+#
+#            ./configure \
+#              --host=aarch64-linux-gnu \
+#              --enable-static \
+#              --disable-shared \
+#              --prefix=/src/libffi-3.5.2/glibc/arm64
+#
+#            make -j\$(nproc)
+#            make install
+#          "
       - name: Post build architecture and capability verify
         run: |
           file src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a
