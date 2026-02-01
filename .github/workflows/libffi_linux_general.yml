@@ -15,12 +15,12 @@ jobs:
             image: arm64v8/ubuntu:20.04
             host: aarch64-linux-gnu
           - arch: x86_64
-            image: ubuntu:18.04
+            image: ubuntu:20.04
             host: x86_64-linux-gnu
     container: ${{ matrix.image }}
     steps:
       - name: Pulling vendors branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Intalling QEMU
         if: matrix.arch == 'arm64'
         uses: docker/setup-qemu-action@v3
