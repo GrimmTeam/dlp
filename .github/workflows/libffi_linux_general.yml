@@ -28,7 +28,7 @@ jobs:
               --enable-static \
               --disable-shared \
               --disable-docs \
-              --prefix=/src/src/libffi-3.5.2/glibc/arm64
+              --prefix=/src/src/libffi-3.5.2/glibc/aarch64
 
             make -j\$(nproc)
             make install
