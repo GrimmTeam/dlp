@@ -25,7 +25,7 @@ jobs:
               --host=aarch64-linux-gnu \
               --enable-static \
               --disable-shared \
-              --prefix=/src/src/libffi-3.5.2/glibc/arm64
+              --prefix=/src/libffi-3.5.2/glibc/arm64
 
             make -j\$(nproc)
             make install
