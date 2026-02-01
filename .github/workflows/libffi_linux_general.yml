@@ -8,6 +8,7 @@ jobs:
     name: "Linux build for glibc compiler (ARM64)"
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
       - name: Build libffi (arm64)
         run: |
