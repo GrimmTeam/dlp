@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Intalling QEMU
         if: matrix.arch == 'arm64'
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v2
       - name: Install dependencies
         working-directory: src/libffi-3.5.2
         run: |
@@ -71,7 +71,7 @@ jobs:
     container: ${{ matrix.image }}
     steps:
       - name: Pulling vendors branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - name: Intalling QEMU
         if: matrix.arch == 'arm64'
         uses: docker/setup-qemu-action@v3
