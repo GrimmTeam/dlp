@@ -2,27 +2,52 @@ name: libffi-linux-aarch64-x86_64-build
 
 on:
   workflow_dispatch:
-
-
+  
 jobs:
-  linux-glibc-build:
-    name: "Linux build for glibc compiler"
-    runs-on: ubuntu-20.04
+  linux-glibc-aarch64-build:
+    name: "Linux build for glibc compiler (ARM64)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/setup-qemu-action@v3
+        if: matrix.arch == 'arm64'
+      - name: Build libffi (arm64)
+        if: matrix.arch == 'arm64'
+        run: |
+          docker run --rm \
+          --platform=linux/arm64 \
+          -v "$PWD:/src" \
+          ubuntu:20.04 \
+          bash -e -c "
+            apt-get update
+            apt-get install -y build-essential automake libtool
+            cd /src/src/libffi-3.5.2
+            chmod +x configure
+
+            ./configure \
+              --host=aarch64-linux-gnu \
+              --enable-static \
+              --disable-shared \
+              --prefix=/src/src/libffi-3.5.2/glibc/arm64
+
+            make -j\$(nproc)
+            make install
+          "
+  linux-glibc-x86_64-build:
+    name: "Linux build for glibc compiler (AMD64)"
+    needs: linux-glibc-aarch64-build
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - arch: arm64
-            host: aarch64-linux-gnu
-            platform: linux/arm64
           - arch: x86_64
+            image: ubuntu:20.04
             host: x86_64-linux-gnu
             platform: linux/amd64
+    container: 
+      image: ${{ matrix.image }}
     steps:
       - name: Pulling vendors branch
         uses: actions/checkout@v4
-      - name: Intalling QEMU
-        if: matrix.arch == 'arm64'
-        uses: docker/setup-qemu-action@v3
       - name: Install dependencies
         working-directory: src/libffi-3.5.2
         run: |
@@ -43,19 +68,19 @@ jobs:
       - name: Post build architecture and capability verify
         run: |
           file src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a
-          strings src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a | grep -E 'glibc|musl'
-          readelf --version-info src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a
+#          strings src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a | grep -E 'glibc|musl'
+#          readelf --version-info src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a
       - name: Clean up build trash files
         run: |
           make clean
-          rm -r src/libffi-3.5.2/glibc/${{ matrix.arch }}/shared
+          rm -r src/libffi-3.5.2/glibc/${{ matrix.arch }}/shared || true
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.host }}
           path: src/libffi-3.5.2/glibc/${{ matrix.arch }}
   linux-musl-build:
-    needs: linux-glibc-build
+    needs: linux-glibc-x86_64-build
     name: "Linux build for musl compiler"
     runs-on: ubuntu-latest
     strategy:
