@@ -27,6 +27,7 @@ jobs:
               --host=aarch64-linux-gnu \
               --enable-static \
               --disable-shared \
+              --disable-docs \
               --prefix=/src/src/libffi-3.5.2/glibc/arm64
 
             make -j\$(nproc)
@@ -46,15 +47,7 @@ jobs:
     name: "Linux build for glibc compiler (AMD64)"
     needs: linux-glibc-aarch64-build
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - arch: x86_64
-            image: ubuntu:20.04
-            host: x86_64-linux-gnu
-            platform: linux/amd64
-    container: 
-      image: ${{ matrix.image }}
+    container: ubuntu:20.04
     steps:
       - name: Pulling vendors branch
         uses: actions/checkout@v4
@@ -64,30 +57,31 @@ jobs:
           apt-get update
           apt-get install -y build-essential automake libtool
           chmod +x configure
-      - name: Build libfii (${{ matrix.arch }})
+      - name: Build libfii (x86_64)
         working-directory: src/libffi-3.5.2
         run: |
           ./configure \
-          --host=${{ matrix.host }} \
+          --host=x86_64-linux-gnu \
           --enable-static \
           --disable-shared \
-          --prefix=$PWD/glibc/${{ matrix.arch }}
+          --disable-docs \
+          --prefix=$PWD/glibc/x86_64
 
           make -j$(sysctl -n hw.ncpu)
           make install
       - name: Post build architecture and capability verify
         run: |
-          file src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a
+          file src/libffi-3.5.2/glibc/x86_64/lib/libffi.a
 #          strings src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a | grep -E 'glibc|musl'
 #          readelf --version-info src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a
       - name: Clean up build trash files
         run: |
-          rm -r src/libffi-3.5.2/glibc/${{ matrix.arch }}/shared || true
+          rm -r src/libffi-3.5.2/glibc/x86_64/shared || true
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.host }}
-          path: src/libffi-3.5.2/glibc/${{ matrix.arch }}
+          name: x86_64-linux-gnu
+          path: src/libffi-3.5.2/glibc/x86_64
   linux-musl-build:
     needs: linux-glibc-x86_64-build
     name: "Linux build for musl compiler"
