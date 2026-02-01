@@ -35,14 +35,14 @@ jobs:
           "
       - name: Post build architecture and capability verify
         run: |
-          file src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a
+          file src/libffi-3.5.2/glibc/aarch64/lib/libffi.a
 #          strings src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a | grep -E 'glibc|musl'
 #          readelf --version-info src/libffi-3.5.2/glibc/${{ matrix.arch }}/lib/libffi.a          
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.host }}
-          path: src/libffi-3.5.2/glibc/${{ matrix.arch }}          
+          name: aarch64-linux-gnu
+          path: src/libffi-3.5.2/glibc/aarch64          
   linux-glibc-x86_64-build:
     name: "Linux build for glibc compiler (AMD64)"
     needs: linux-glibc-aarch64-build
