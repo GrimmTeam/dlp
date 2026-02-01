@@ -14,10 +14,14 @@ jobs:
           - arch: arm64
             image: arm64v8/ubuntu:20.04
             host: aarch64-linux-gnu
+            platform: linux/arm64
           - arch: x86_64
             image: ubuntu:20.04
             host: x86_64-linux-gnu
-    container: ${{ matrix.image }}
+            platform: linux/amd64
+    container: 
+      image: ${{ matrix.image }}
+      options: --platform=${{ matrix.platform }}
     steps:
       - name: Pulling vendors branch
         uses: actions/checkout@v4
