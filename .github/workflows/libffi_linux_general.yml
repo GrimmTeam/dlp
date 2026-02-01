@@ -20,7 +20,7 @@ jobs:
     container: ${{ matrix.image }}
     steps:
       - name: Pulling vendors branch
-        uses: actions/checkout@vendors
+        uses: actions/checkout@4
       - name: Intalling QEMU
         if: matrix.arch == 'arm64'
         uses: docker/setup-qemu-action@v3
@@ -71,7 +71,7 @@ jobs:
     container: ${{ matrix.image }}
     steps:
       - name: Pulling vendors branch
-        uses: actions/checkout@vendors
+        uses: actions/checkout@4
       - name: Intalling QEMU
         if: matrix.arch == 'arm64'
         uses: docker/setup-qemu-action@v3
