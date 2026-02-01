@@ -7,21 +7,16 @@ on:
 jobs:
   linux-glibc-build:
     name: "Linux build for glibc compiler"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         include:
           - arch: arm64
-            image: ubuntu:20.04
             host: aarch64-linux-gnu
             platform: linux/arm64
           - arch: x86_64
-            image: ubuntu:20.04
             host: x86_64-linux-gnu
             platform: linux/amd64
-    container: 
-      image: ${{ matrix.image }}
-      options: --platform=${{ matrix.platform }}
     steps:
       - name: Pulling vendors branch
         uses: actions/checkout@v4
